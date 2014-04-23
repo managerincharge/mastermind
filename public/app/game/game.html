@@ -1,0 +1,7 @@
+<table class="table table-bordered">
+	<tr ng-repeat="guess in gameMgr.guesses">
+		<td><span class="badge">{{guess.guessNum}}</span></td>
+	</tr>
+</table>
+
+<button ng-click="scoreGuess()">Score Guess</button>

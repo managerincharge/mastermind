@@ -1,15 +1,15 @@
 'use strict';
 
-angular.module('app', ['ui.router', 'app.common', 'app.data', 'app.home'])
+angular.module('app', ['ui.router', 'game'])
 	.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
 
 		$stateProvider
-			.state('home', {
-				url: '/home',
-				templateUrl: 'app/home/home.html',
-				controller: 'HomeCtrl'
+			.state('game', {
+				url: '/',
+				templateUrl: 'app/game/game.html',
+				controller: 'GameCtrl'
 			});
 
-		$urlRouterProvider.otherwise('/home');
+		$urlRouterProvider.otherwise('/');
 
 	}]);
