@@ -1,8 +1,53 @@
 <table class="table table-bordered">
-	<thead>Mastermind</thead>
-	<tr ng-repeat="guess in gameMgr.guesses">
-		<td><span class="badge">{{guess.guessNum}}</span></td>
+	<thead>
+		<th>Guess</th>
+		<th colspan="{{gameMgr.guesses[0].positions.length}}" style="text-align:center">
+			<button class="btn" ng-class="{'btn-primary': $index===gameMgr.selectedShapeIndex, 'btn-default': $index!==gameMgr.selectedShapeIndex}" style="margin-right:10px"
+					ng-click="gameMgr.changeShape($index)"
+					ng-repeat="n in [0,1,2,3,4,5] | limitTo:gameMgr.numShapes">
+				<span class="glyphicon {{gameMgr.SHAPES[n]}}"></span>
+			</button>
+		</th>
+		<th style="text-align:center">
+			<label>Shapes
+				<select ng-model="gameMgr.numShapes" ng-change="gameMgr.newGame()">
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+				</select>
+			</label>
+			&nbsp;&nbsp;&nbsp;
+			<label>Positions
+				<select ng-model="gameMgr.numPositions" ng-change="gameMgr.newGame()">
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+				</select>
+			</label>
+		</th>
+	</thead>
+	<tr ng-repeat="guess in gameMgr.guesses" style="text-align:center">
+		<td style="vertical-align:middle"><span class="badge">{{guess.guessNum}}</span></td>
+		<td style="vertical-align:middle" ng-repeat="pos in gameMgr.guesses[0].positions track by $index" ng-click="gameMgr.setShape(guess, $index)">
+			<span class="glyphicon" ng-class="guess.positions[$index]"></span>
+		</td>
+		<td>
+			<div ng-show="guess.score">
+				<span ng-repeat="s in guess.score track by $index" class="glyphicon" ng-class="s" style="margin-right:20px"></span>
+			</div>
+			<button class="btn btn-success"
+					ng-show="$index===gameMgr.curGuessNum - 1 && gameMgr.gameState===gameMgr.GAME_STATES.GUESSING"
+					ng-disabled="!guess.isValidGuess()"
+					ng-click="gameMgr.scoreGuess()">Score Guess
+			</button>
+			<button class="btn btn-danger"
+					ng-show="$index===gameMgr.curGuessNum - 1 && gameMgr.gameState===gameMgr.GAME_STATES.WON"
+					ng-click="gameMgr.newGame()">You WON!  Click for New Game
+			</button>
+		</td>
 	</tr>
 </table>
-
-<button ng-click="scoreGuess()">Score Guess</button>

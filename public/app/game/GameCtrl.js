@@ -8,6 +8,4 @@ angular.module('game')
 		
 		$scope.gameMgr.newGame();
 		
-		$scope.scoreGuess = $scope.gameMgr.scoreGuess;
-
 	}]);
