@@ -36,6 +36,9 @@
 			<span class="glyphicon" ng-class="guess.positions[$index]"></span>
 		</td>
 		<td>
+			<div ng-show="guess.score.length===0 && $index!==gameMgr.curGuessNum - 1">
+				<span class="glyphicon glyphicon-thumbs-down"></span>
+			</div>
 			<div ng-show="guess.score">
 				<span ng-repeat="s in guess.score track by $index" class="glyphicon" ng-class="s" style="margin-right:20px"></span>
 			</div>
