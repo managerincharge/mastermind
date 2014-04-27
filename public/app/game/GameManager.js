@@ -2,7 +2,7 @@
 
 angular.module('game')
 
-	.factory('GameManager', [function () {
+	.factory('GameManager', ['$interval', function ($interval) {
 		
 		var gameMgr = {};
 		
@@ -49,6 +49,9 @@ angular.module('game')
 			gameMgr.guesses = [];
 			gameMgr.guesses[gameMgr.curGuessNum - 1] = new gameMgr.Guess(1);
 			gameMgr.setCode();
+			gameMgr.gameStartTime = undefined;
+			gameMgr.stopInterval = undefined;
+			gameMgr.elapsedTime = 0;
 		};
 		
 		gameMgr.setCode = function () {
@@ -56,7 +59,7 @@ angular.module('game')
 			for (var i = 0; i < gameMgr.numPositions; i++) {
 				gameMgr.code[i] = gameMgr.SHAPES[Math.floor(Math.random() * gameMgr.numShapes)];
 			}
-console.log(gameMgr.code);
+			console.log(gameMgr.code);
 		};
 		
 		gameMgr.changeShape = function (idx) {
@@ -69,6 +72,12 @@ console.log(gameMgr.code);
 			if (guess.guessNum === gameMgr.curGuessNum) {
 				guess.positions[idx] = guess.positions[idx] ? undefined : gameMgr.SHAPES[gameMgr.selectedShapeIndex];
 			}
+			if (!gameMgr.gameStartTime) {
+				gameMgr.gameStartTime = new Date();
+				gameMgr.stopInterval = $interval(function () {
+					gameMgr.elapsedTime = (new Date() - gameMgr.gameStartTime);
+				}, 1000);
+			}
 		};
 				
 		gameMgr.scoreGuess = function () {
@@ -78,6 +87,7 @@ console.log(gameMgr.code);
 				i = 0,
 				j = 0;
 			if (gameMgr.guesses[gameMgr.curGuessNum - 1].positions.join() === gameMgr.code.join()) {
+				$interval.cancel(gameMgr.stopInterval);
 				gameMgr.gameState = gameMgr.GAME_STATES.WON;
 			} else {
 				for (i = 0; i < gameMgr.numPositions; i++) {
